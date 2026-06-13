@@ -166,6 +166,19 @@ async def compare_candidates(req: CompareRequest):
         logger.bind(stage="RESPONSE").error(f"Error fetching comparison: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
+@app.get("/resumes")
+async def get_all_resumes():
+    logger.bind(stage="REQUEST").debug("Received request to list all resumes.")
+    try:
+        resumes = list_resumes()
+        # Remove raw_text to keep payload small
+        for r in resumes:
+            r.pop("raw_text", None)
+        return {"resumes": resumes}
+    except Exception as e:
+        logger.bind(stage="RESPONSE").error(f"Error listing resumes: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
 @app.get("/dashboard")
 async def get_system_dashboard():
     logger.bind(stage="REQUEST").debug("Received request for dashboard stats.")

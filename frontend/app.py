@@ -311,8 +311,53 @@ if page == ":material/dashboard: Dashboard":
                 else:
                     st.write("No search logs recorded yet.")
                     
+            # Row 3: Database Candidate Directory
+            st.markdown("---")
+            st.markdown("### 📋 Database Candidate Directory")
+            
+            try:
+                r_resumes = requests.get(f"{BACKEND_URL}/resumes")
+                if r_resumes.status_code == 200:
+                    resumes_list = r_resumes.json().get("resumes", [])
+                    if resumes_list:
+                        # Header columns
+                        col_hdr_name, col_hdr_file, col_hdr_exp, col_hdr_act = st.columns([2, 3, 1, 1])
+                        with col_hdr_name:
+                            st.markdown("**Candidate Name**")
+                        with col_hdr_file:
+                            st.markdown("**Filename**")
+                        with col_hdr_exp:
+                            st.markdown("**Experience**")
+                        with col_hdr_act:
+                            st.markdown("**Action**")
+                        st.markdown("<hr style='margin:4px 0 12px 0; border-top:1px solid rgba(255,255,255,0.05);'>", unsafe_allow_html=True)
+                        
+                        for r in resumes_list:
+                            col_c_name, col_c_file, col_c_exp, col_c_act = st.columns([2, 3, 1, 1])
+                            with col_c_name:
+                                st.write(r.get("candidate_name") or "Unknown Candidate")
+                            with col_c_file:
+                                st.write(r.get("filename"))
+                            with col_c_exp:
+                                st.write(f"{r.get('experience_years', 0)} years")
+                            with col_c_act:
+                                if st.button("Delete 🗑️", key=f"del_db_{r['resume_id']}", type="secondary"):
+                                    # Call delete route
+                                    del_res = requests.delete(f"{BACKEND_URL}/resume/{r['resume_id']}")
+                                    if del_res.status_code == 200:
+                                        st.success(f"Deleted {r.get('candidate_name')}", icon=":material/check_circle:")
+                                        st.experimental_rerun()
+                                    else:
+                                        st.error("Deletion failed.", icon=":material/error:")
+                    else:
+                        st.write("No resumes uploaded to the directory yet.")
+                else:
+                    st.error("Failed to query candidate directory from backend.", icon=":material/error:")
+            except Exception as e:
+                st.error(f"Error connecting to directory database: {e}", icon=":material/error:")
+                    
         except Exception as e:
-            st.error(f"Error fetching dashboard data: {e}")
+            st.error(f"Error fetching dashboard data: {e}", icon=":material/error:")
 
 elif page == ":material/cloud_upload: Upload Resume":
     st.markdown("<h1 style='background: linear-gradient(135deg, #e2e8f0 0%, #94a3b8 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;'>Upload Candidate Resumes</h1>", unsafe_allow_html=True)
