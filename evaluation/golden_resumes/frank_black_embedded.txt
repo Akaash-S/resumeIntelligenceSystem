@@ -1,0 +1,19 @@
+FRANK BLACK
+        Email: frank.b@example.com
+        
+        SUMMARY:
+        Embedded Systems Engineer with 6 years of experience writing firmware, low-level drivers, and working with real-time operating systems (RTOS).
+        
+        EXPERIENCE:
+        Embedded Engineer at ChipDevices (2020 - Present)
+        - Written C++ and C firmware for microcontrollers.
+        - Designed and implemented custom drivers using FreeRTOS.
+        
+        SKILLS:
+        c, c++, embedded systems, rtos, firmware, freertos, spi, i2c
+        
+        EDUCATION:
+        BS in Electrical Engineering, Polytechnic, 2020
+        
+        CERTIFICATIONS:
+        Embedded Systems Certified Professional

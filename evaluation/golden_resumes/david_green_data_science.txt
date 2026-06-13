@@ -1,0 +1,20 @@
+DAVID GREEN, PhD
+        Email: david.green@example.com
+        
+        SUMMARY:
+        Data Scientist with 4 years of experience applying machine learning algorithms to complex datasets. Expert in PyTorch, SQL, and pandas.
+        
+        EXPERIENCE:
+        Data Scientist at DataAI Corp (2022 - Present)
+        - Developed and deployed deep learning models using PyTorch.
+        - Written complex SQL queries for data aggregation.
+        - Analyzed structural datasets using pandas and numpy.
+        
+        SKILLS:
+        python, machine learning, pytorch, sql, pandas, numpy, scikit-learn
+        
+        EDUCATION:
+        PhD in Data Science, Research University, 2022
+        
+        CERTIFICATIONS:
+        TensorFlow Developer Certificate

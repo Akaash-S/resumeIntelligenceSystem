@@ -1,0 +1,19 @@
+EVA WHITE, PMP
+        Email: eva.w@example.com
+        
+        SUMMARY:
+        Senior Project Manager with 10 years of experience leading agile software development teams. Professional Scrum Master and PMP certified.
+        
+        EXPERIENCE:
+        Project Manager at Global Tech (2016 - Present)
+        - Managed software delivery cycles using Scrum and Kanban.
+        - Used Jira for project tracking and backlog grooming.
+        
+        SKILLS:
+        project management, agile, scrum, jira, pmp, communication, leadership
+        
+        EDUCATION:
+        MBA in Technology Management, Business School, 2016
+        
+        CERTIFICATIONS:
+        PMP - Project Management Professional, Professional Scrum Master (PSM I)

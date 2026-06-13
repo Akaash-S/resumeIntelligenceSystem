@@ -1,0 +1,19 @@
+BOB JONES
+        Email: bob.jones@example.com | Phone: 234-567-8901
+        
+        SUMMARY:
+        Senior Backend Developer specializing in Java, Spring Boot, and cloud architecture. 8 years of experience building high-throughput microservices.
+        
+        EXPERIENCE:
+        Senior Java Developer at CloudSolutions (2018 - Present)
+        - Re-architected monolith application to microservices with Java and Spring Boot.
+        - Managed Kubernetes clusters and deployments on Google Cloud Platform (GCP).
+        
+        SKILLS:
+        java, spring boot, kubernetes, gcp, docker, maven, postgresql
+        
+        EDUCATION:
+        MS in Computer Science, Tech Institute, 2018
+        
+        CERTIFICATIONS:
+        Google Certified Professional Cloud Architect

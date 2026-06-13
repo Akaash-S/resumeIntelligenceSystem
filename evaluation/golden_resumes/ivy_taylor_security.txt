@@ -1,0 +1,19 @@
+IVY TAYLOR, CISSP
+        Email: ivy.t@example.com
+        
+        SUMMARY:
+        Cyber Security Engineer with 7 years of experience securing cloud systems, networks, and deploying firewalls. CISSP certified.
+        
+        EXPERIENCE:
+        Security Engineer at SecureNet (2019 - Present)
+        - Configured and monitored corporate firewalls and IDS.
+        - Conducted threat modeling on cloud network topologies.
+        
+        SKILLS:
+        cyber security, cissp, firewalls, network security, threat modeling, linux
+        
+        EDUCATION:
+        BS in Cyber Security, Tech College, 2019
+        
+        CERTIFICATIONS:
+        CISSP - Certified Information Systems Security Professional

@@ -1,0 +1,16 @@
+JACK DAVIS
+        Email: jack.d@example.com
+        
+        SUMMARY:
+        Junior Web Developer with 1 year of experience building custom PHP and Laravel applications. Enthusiastic self-learner.
+        
+        EXPERIENCE:
+        Web Developer at WebDev Shop (2025 - Present)
+        - Developed custom modules in PHP and Laravel.
+        - Styled interfaces using Bootstrap.
+        
+        SKILLS:
+        php, laravel, mysql, bootstrap, html, css, javascript
+        
+        EDUCATION:
+        High School Diploma, Self-Taught Developer

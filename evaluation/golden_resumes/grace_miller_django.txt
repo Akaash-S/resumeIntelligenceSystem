@@ -1,0 +1,16 @@
+GRACE MILLER
+        Email: grace.m@example.com
+        
+        SUMMARY:
+        Full Stack Developer with 3 years of experience. Strong background in Python, Django, PostgreSQL, and basic frontend technologies.
+        
+        EXPERIENCE:
+        Full Stack Developer at SoftGroup (2023 - Present)
+        - Maintained Python Django backend applications.
+        - Wrote PostgreSQL migrations and queries.
+        
+        SKILLS:
+        python, django, postgresql, html, css, javascript, git
+        
+        EDUCATION:
+        BS in Software Engineering, University of Software, 2023

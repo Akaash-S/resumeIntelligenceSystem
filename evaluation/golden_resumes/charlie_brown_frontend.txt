@@ -1,0 +1,19 @@
+CHARLIE BROWN
+        Email: charlie.b@example.com
+        
+        SUMMARY:
+        Frontend Web Developer with 2 years of experience specializing in React, TypeScript, and responsive design systems using Tailwind CSS.
+        
+        EXPERIENCE:
+        Frontend Developer at WebLabs (2024 - Present)
+        - Built interactive user interfaces using React and TypeScript.
+        - Styled components with Tailwind CSS for pixel-perfect designs.
+        
+        SKILLS:
+        react, typescript, tailwind css, javascript, html, css, node.js
+        
+        EDUCATION:
+        BS in Information Technology, City College, 2024
+        
+        CERTIFICATIONS:
+        Meta Front-End Developer Professional Certificate

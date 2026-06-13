@@ -1,0 +1,20 @@
+ALICE SMITH
+        Email: alice.smith@example.com | Phone: 123-456-7890
+        
+        SUMMARY:
+        Results-oriented Python Software Engineer with 5 years of experience building scalable web applications. Expert in FastAPI, Docker, and AWS cloud deployments.
+        
+        EXPERIENCE:
+        Software Engineer at TechCorp (2021 - Present)
+        - Developed REST APIs using Python and FastAPI.
+        - Containerized applications using Docker.
+        - Managed cloud infrastructure on AWS (EC2, S3, RDS).
+        
+        SKILLS:
+        python, fastapi, docker, aws, sql, postgresql, git
+        
+        EDUCATION:
+        BS in Computer Science, State University, 2021
+        
+        CERTIFICATIONS:
+        AWS Certified Solutions Architect
