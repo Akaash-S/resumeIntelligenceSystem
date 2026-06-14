@@ -215,7 +215,7 @@ def get_stats() -> dict:
         top_skills = dict(Counter(all_skills).most_common(10))
         
         # Recent searches
-        cursor.execute("SELECT query, timestamp FROM searches ORDER BY timestamp DESC LIMIT 5")
+        cursor.execute("SELECT query, timestamp, results_count FROM searches ORDER BY timestamp DESC LIMIT 5")
         recent_searches = [dict(r) for r in cursor.fetchall()]
         
         return {

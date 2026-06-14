@@ -11,8 +11,8 @@ def call_ollama(
 ) -> str:
     url = f"{settings.OLLAMA_BASE_URL}/api/generate"
     
-    # Try llama3 first, fallback to llama3.2:1b
-    models = ["llama3", "llama3.2:1b"]
+    # Try llama3.2:1b first to prevent OOM errors on standard hardware, fallback to llama3
+    models = ["llama3.2:1b", "llama3"]
     
     for model in models:
         payload = {

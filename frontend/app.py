@@ -11,95 +11,172 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Custom CSS for Premium Dark Glassmorphism Styling
-st.markdown("""
+if "theme" not in st.session_state:
+    st.session_state["theme"] = "dark"
+
+# Theme CSS Variables
+if st.session_state["theme"] == "dark":
+    theme_css = """
+    :root {
+        --bg-color: #0d0f1a;
+        --text-color: #e2e8f0;
+        --sidebar-bg: rgba(22, 24, 47, 0.9);
+        --sidebar-border: rgba(255, 255, 255, 0.05);
+        --card-bg: rgba(30, 41, 59, 0.45);
+        --card-border: rgba(255, 255, 255, 0.05);
+        --card-hover: rgba(99, 102, 241, 0.3);
+        --card-shadow: rgba(99, 102, 241, 0.08);
+        --muted-text: #94a3b8;
+        --badge-bg: rgba(99, 102, 241, 0.15);
+        --badge-text: #a5b4fc;
+        --badge-border: rgba(99, 102, 241, 0.2);
+        --cert-bg: rgba(168, 85, 247, 0.15);
+        --cert-text: #e9d5ff;
+        --cert-border: rgba(168, 85, 247, 0.2);
+        --title-grad-start: #e2e8f0;
+        --title-grad-end: #94a3b8;
+        --metric-grad-start: #818cf8;
+        --metric-grad-end: #c084fc;
+        --score-bg: rgba(30, 41, 59, 0.8);
+        --bg-gradient-1: rgba(99, 102, 241, 0.05);
+        --bg-gradient-2: rgba(168, 85, 247, 0.05);
+        --btn-primary-text: #ffffff;
+        --btn-secondary-bg: rgba(255, 255, 255, 0.05);
+    }
+    """
+else:
+    theme_css = """
+    :root {
+        --bg-color: #f8fafc;
+        --text-color: #0f172a;
+        --sidebar-bg: rgba(241, 245, 249, 0.9);
+        --sidebar-border: rgba(0, 0, 0, 0.1);
+        --card-bg: rgba(255, 255, 255, 0.85);
+        --card-border: rgba(0, 0, 0, 0.1);
+        --card-hover: rgba(79, 70, 229, 0.4);
+        --card-shadow: rgba(79, 70, 229, 0.15);
+        --muted-text: #475569;
+        --badge-bg: rgba(79, 70, 229, 0.1);
+        --badge-text: #4338ca;
+        --badge-border: rgba(79, 70, 229, 0.2);
+        --cert-bg: rgba(147, 51, 234, 0.1);
+        --cert-text: #7e22ce;
+        --cert-border: rgba(147, 51, 234, 0.2);
+        --title-grad-start: #0f172a;
+        --title-grad-end: #334155;
+        --metric-grad-start: #4f46e5;
+        --metric-grad-end: #9333ea;
+        --score-bg: #ffffff;
+        --bg-gradient-1: rgba(99, 102, 241, 0.08);
+        --bg-gradient-2: rgba(168, 85, 247, 0.08);
+        --btn-primary-text: #ffffff;
+        --btn-secondary-bg: rgba(0, 0, 0, 0.03);
+    }
+    """
+
+# Custom CSS for Premium Glassmorphism Styling
+st.markdown(f"""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
     
-    /* Apply globally */
-    * {
-        font-family: 'Plus Jakarta Sans', sans-serif !important;
-    }
+    {theme_css}
     
-    h1, h2, h3 {
+    /* Apply globally */
+    * {{
+        font-family: 'Plus Jakarta Sans', sans-serif !important;
+    }}
+    
+    h1, h2, h3 {{
         font-family: 'Outfit', sans-serif !important;
         font-weight: 700 !important;
         letter-spacing: -0.02em;
-    }
+        color: var(--text-color) !important;
+    }}
+    
+    p, span, div {{
+        color: var(--text-color);
+    }}
 
     /* Main Container background */
-    .stApp {
-        background-color: #0d0f1a;
+    .stApp {{
+        background-color: var(--bg-color);
         background-image: 
-            radial-gradient(at 10% 20%, rgba(99, 102, 241, 0.05) 0px, transparent 50%),
-            radial-gradient(at 90% 10%, rgba(168, 85, 247, 0.05) 0px, transparent 50%);
-        color: #e2e8f0;
-    }
+            radial-gradient(at 10% 20%, var(--bg-gradient-1) 0px, transparent 50%),
+            radial-gradient(at 90% 10%, var(--bg-gradient-2) 0px, transparent 50%);
+        color: var(--text-color);
+    }}
 
     /* Sidebar glassmorphic styling */
-    section[data-testid="stSidebar"] {
-        background-color: rgba(22, 24, 47, 0.9) !important;
-        border-right: 1px solid rgba(255, 255, 255, 0.05) !important;
+    section[data-testid="stSidebar"] {{
+        background-color: var(--sidebar-bg) !important;
+        border-right: 1px solid var(--sidebar-border) !important;
         backdrop-filter: blur(10px);
-    }
+    }}
     
     /* Glassmorphic card styling */
-    .glass-card {
-        background: rgba(30, 41, 59, 0.45);
+    .glass-card {{
+        background: var(--card-bg);
         backdrop-filter: blur(8px);
-        border: 1px solid rgba(255, 255, 255, 0.05);
+        border: 1px solid var(--card-border);
         border-radius: 16px;
         padding: 24px;
         margin-bottom: 20px;
         transition: all 0.3s ease-in-out;
-    }
+    }}
     
-    .glass-card:hover {
-        border-color: rgba(99, 102, 241, 0.3);
-        box-shadow: 0 8px 30px rgba(99, 102, 241, 0.08);
+    .glass-card:hover {{
+        border-color: var(--card-hover);
+        box-shadow: 0 8px 30px var(--card-shadow);
         transform: translateY(-2px);
-    }
+    }}
     
     /* Metrics cards styling */
-    .metric-value {
+    .metric-value {{
         font-size: 36px;
         font-weight: 700;
         font-family: 'Outfit', sans-serif !important;
-        background: linear-gradient(135deg, #818cf8 0%, #c084fc 100%);
+        background: linear-gradient(135deg, var(--metric-grad-start) 0%, var(--metric-grad-end) 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
-    }
+    }}
     
-    .metric-label {
+    .metric-label {{
         font-size: 14px;
-        color: #94a3b8;
+        color: var(--muted-text);
         text-transform: uppercase;
         letter-spacing: 0.05em;
         margin-bottom: 4px;
-    }
+    }}
     
+    /* Title Gradient */
+    .title-gradient {{
+        background: linear-gradient(135deg, var(--title-grad-start) 0%, var(--title-grad-end) 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }}
+
     /* Badges */
-    .badge {
+    .badge {{
         display: inline-block;
         padding: 4px 10px;
-        background-color: rgba(99, 102, 241, 0.15);
-        color: #a5b4fc;
-        border: 1px solid rgba(99, 102, 241, 0.2);
+        background-color: var(--badge-bg);
+        color: var(--badge-text);
+        border: 1px solid var(--badge-border);
         border-radius: 9999px;
         font-size: 11px;
         font-weight: 600;
         margin-right: 6px;
         margin-bottom: 6px;
-    }
+    }}
     
-    .badge-cert {
-        background-color: rgba(168, 85, 247, 0.15);
-        color: #e9d5ff;
-        border-color: rgba(168, 85, 247, 0.2);
-    }
+    .badge-cert {{
+        background-color: var(--cert-bg);
+        color: var(--cert-text);
+        border-color: var(--cert-border);
+    }}
 
     /* Score badges */
-    .score-circle {
+    .score-circle {{
         display: inline-flex;
         align-items: center;
         justify-content: center;
@@ -109,30 +186,28 @@ st.markdown("""
         font-weight: 700;
         font-size: 16px;
         font-family: 'Outfit', sans-serif !important;
-    }
+        background-color: var(--score-bg);
+    }}
     
-    .score-high {
-        background: rgba(34, 197, 94, 0.15);
-        color: #4ade80;
+    .score-high {{
+        color: #22c55e;
         border: 2px solid #22c55e;
         box-shadow: 0 0 15px rgba(34, 197, 94, 0.2);
-    }
+    }}
 
-    .score-medium {
-        background: rgba(234, 179, 8, 0.15);
-        color: #fde047;
+    .score-medium {{
+        color: #eab308;
         border: 2px solid #eab308;
         box-shadow: 0 0 15px rgba(234, 179, 8, 0.2);
-    }
+    }}
 
-    .score-low {
-        background: rgba(239, 68, 68, 0.15);
-        color: #fca5a5;
+    .score-low {{
+        color: #ef4444;
         border: 2px solid #ef4444;
-    }
+    }}
 
     /* Pulsing Green Indicator */
-    .pulse-green {
+    .pulse-green {{
         display: inline-block;
         width: 10px;
         height: 10px;
@@ -142,9 +217,9 @@ st.markdown("""
         animation: pulse 1.6s infinite;
         vertical-align: middle;
         margin-right: 8px;
-    }
+    }}
 
-    .pulse-red {
+    .pulse-red {{
         display: inline-block;
         width: 10px;
         height: 10px;
@@ -154,37 +229,104 @@ st.markdown("""
         animation: pulse-r 1.6s infinite;
         vertical-align: middle;
         margin-right: 8px;
-    }
+    }}
     
-    @keyframes pulse {
-        0% {
+    @keyframes pulse {{
+        0% {{
             transform: scale(0.95);
             box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7);
-        }
-        70% {
+        }}
+        70% {{
             transform: scale(1);
             box-shadow: 0 0 0 6px rgba(34, 197, 94, 0);
-        }
-        100% {
+        }}
+        100% {{
             transform: scale(0.95);
             box-shadow: 0 0 0 0 rgba(34, 197, 94, 0);
-        }
-    }
+        }}
+    }}
 
-    @keyframes pulse-r {
-        0% {
+    @keyframes pulse-r {{
+        0% {{
             transform: scale(0.95);
             box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
-        }
-        70% {
+        }}
+        70% {{
             transform: scale(1);
             box-shadow: 0 0 0 6px rgba(239, 68, 68, 0);
-        }
-        100% {
+        }}
+        100% {{
             transform: scale(0.95);
             box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
-        }
-    }
+        }}
+    }}
+    
+    /* Buttons and Icons Contrast */
+    .stButton > button[kind="secondary"] {{
+        background-color: var(--btn-secondary-bg) !important;
+        color: var(--text-color) !important;
+        border: 1px solid var(--badge-border) !important;
+        border-radius: 8px !important;
+        transition: all 0.2s ease !important;
+    }}
+    
+    .stButton > button[kind="secondary"]:hover {{
+        border-color: var(--metric-grad-start) !important;
+        background-color: var(--badge-bg) !important;
+        color: var(--metric-grad-start) !important;
+    }}
+
+    .stButton > button[kind="primary"] {{
+        background: linear-gradient(135deg, var(--metric-grad-start) 0%, var(--metric-grad-end) 100%) !important;
+        color: var(--btn-primary-text) !important;
+        border: none !important;
+        border-radius: 8px !important;
+        font-weight: 600 !important;
+        transition: all 0.2s ease !important;
+    }}
+    
+    .stButton > button[kind="primary"]:hover {{
+        box-shadow: 0 4px 15px var(--card-shadow) !important;
+        transform: translateY(-1px) !important;
+        opacity: 0.9 !important;
+    }}
+    
+    /* Fix Streamlit Alert Colors */
+    [data-testid="stAlert"] {{
+        background-color: var(--card-bg) !important;
+        border: 1px solid var(--card-border) !important;
+    }}
+    [data-testid="stAlert"] p, [data-testid="stAlert"] span, [data-testid="stAlert"] div, [data-testid="stMarkdownContainer"] p {{
+        color: var(--text-color) !important;
+    }}
+    
+    /* Fix File Uploader Contrast */
+    [data-testid="stFileUploaderDropzone"] {{
+        background-color: var(--card-bg) !important;
+        border: 1px dashed var(--card-border) !important;
+    }}
+    [data-testid="stFileUploaderDropzone"] *, [data-testid="stFileUploadDropzone"] * {{
+        color: var(--text-color) !important;
+    }}
+    
+    /* Fix File Uploader Browse Button */
+    [data-testid="stFileUploader"] button {{
+        background-color: var(--btn-secondary-bg) !important;
+        color: var(--text-color) !important;
+        border: 1px solid var(--badge-border) !important;
+        border-radius: 8px !important;
+        transition: all 0.2s ease !important;
+    }}
+    [data-testid="stFileUploader"] button:hover {{
+        border-color: var(--metric-grad-start) !important;
+        background-color: var(--badge-bg) !important;
+        color: var(--metric-grad-start) !important;
+    }}
+    
+    /* Fix Radio Buttons Contrast */
+    .stRadio label, .stRadio p, .stRadio div {{
+        color: var(--text-color) !important;
+    }}
 </style>
 """, unsafe_allow_html=True)
 
@@ -206,13 +348,21 @@ backend_active, services_health = check_connection()
 with st.sidebar:
     st.image("https://img.icons8.com/?size=100&id=114322&format=png", width=64)
     st.markdown("<h2 style='margin-bottom:0px;'>NexusFDE</h2>", unsafe_allow_html=True)
-    st.markdown("<p style='color:#64748b; font-size:13px; margin-top:0px;'>Resume Intelligence System</p>", unsafe_allow_html=True)
+    st.markdown("<p style='color:var(--muted-text); font-size:13px; margin-top:0px;'>Resume Intelligence System</p>", unsafe_allow_html=True)
+    
+    # Theme Toggle
+    st.markdown("<br>", unsafe_allow_html=True)
+    theme_lbl = "☀️ Light Theme" if st.session_state["theme"] == "dark" else "🌙 Dark Theme"
+    if st.button(theme_lbl, use_container_width=True):
+        st.session_state["theme"] = "light" if st.session_state["theme"] == "dark" else "dark"
+        st.rerun()
+        
     st.markdown("---")
     
     # Navigation Option
     page = st.radio(
         "Navigation",
-        [":material/dashboard: Dashboard", ":material/cloud_upload: Upload Resume", ":material/search: NL Search", ":material/compare: Compare Candidates"],
+        ["📊 Dashboard", "📤 Upload Resume", "🔍 NL Search", "⚖️ Compare Candidates"],
         index=0
     )
     st.markdown("---")
@@ -227,7 +377,7 @@ with st.sidebar:
         st.markdown(f"• Ollama LLM: `{services_health.get('ollama')}`")
     else:
         st.markdown(f"<div><span class='pulse-red'></span>Backend Offline</div>", unsafe_allow_html=True)
-        st.warning("FastAPI backend cannot be reached. Run `make start` in the repository root to boot up.", icon=":material/warning:")
+        st.warning("FastAPI backend cannot be reached. Run `make start` in the repository root to boot up.", icon="⚠️")
 
 # Initialize Session State
 if "compare_list" not in st.session_state:
@@ -235,8 +385,8 @@ if "compare_list" not in st.session_state:
 
 # --- PAGE RENDERING ---
 
-if page == ":material/dashboard: Dashboard":
-    st.markdown("<h1 style='background: linear-gradient(135deg, #e2e8f0 0%, #94a3b8 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;'>Talent Database Dashboard</h1>", unsafe_allow_html=True)
+if page == "📊 Dashboard":
+    st.markdown("<h1 class='title-gradient'>Talent Database Dashboard</h1>", unsafe_allow_html=True)
     st.write("Aggregated overview of uploaded talent data, parsed indicators, and system metrics.")
     
     if not backend_active:
@@ -345,26 +495,26 @@ if page == ":material/dashboard: Dashboard":
                                     # Call delete route
                                     del_res = requests.delete(f"{BACKEND_URL}/resume/{r['resume_id']}")
                                     if del_res.status_code == 200:
-                                        st.success(f"Deleted {r.get('candidate_name')}", icon=":material/check_circle:")
+                                        st.success(f"Deleted {r.get('candidate_name')}", icon="✅")
                                         st.rerun()
                                     else:
-                                        st.error("Deletion failed.", icon=":material/error:")
+                                        st.error("Deletion failed.", icon="❌")
                     else:
                         st.write("No resumes uploaded to the directory yet.")
                 else:
-                    st.error("Failed to query candidate directory from backend.", icon=":material/error:")
+                    st.error("Failed to query candidate directory from backend.", icon="❌")
             except Exception as e:
-                st.error(f"Error connecting to directory database: {e}", icon=":material/error:")
+                st.error(f"Error connecting to directory database: {e}", icon="❌")
                     
         except Exception as e:
-            st.error(f"Error fetching dashboard data: {e}", icon=":material/error:")
+            st.error(f"Error fetching dashboard data: {e}", icon="❌")
 
-elif page == ":material/cloud_upload: Upload Resume":
-    st.markdown("<h1 style='background: linear-gradient(135deg, #e2e8f0 0%, #94a3b8 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;'>Upload Candidate Resumes</h1>", unsafe_allow_html=True)
+elif page == "📤 Upload Resume":
+    st.markdown("<h1 class='title-gradient'>Upload Candidate Resumes</h1>", unsafe_allow_html=True)
     st.write("Drag and drop candidate files (PDF, DOCX, TXT) here. The system will parse text, fallback to OCR if needed, run structured LLM extraction, and store embeddings offline.")
     
     if not backend_active:
-        st.error("Upload is disabled when backend service is offline.", icon=":material/error:")
+        st.error("Upload is disabled when backend service is offline.", icon="🚨")
     else:
         uploaded_files = st.file_uploader(
             "Select Resume Files", 
@@ -378,7 +528,7 @@ elif page == ":material/cloud_upload: Upload Resume":
                     st.markdown(f"#### Processing **{uploaded_file.name}**...")
                     
                     status_area = st.empty()
-                    status_area.info("Parsing document and running OCR fallback...", icon=":material/hourglass_empty:")
+                    status_area.info("Parsing document and running OCR fallback...", icon="⏳")
                     
                     try:
                         # Prepare files payload
@@ -389,28 +539,28 @@ elif page == ":material/cloud_upload: Upload Resume":
                         if r.status_code == 200:
                             data = r.json()
                             if data.get("status") == "already_exists":
-                                status_area.warning(f"Already processed. Existing candidate profile: **{data.get('candidate_name')}** (ID: `{data.get('resume_id')}`)", icon=":material/warning:")
+                                status_area.warning(f"Already processed. Existing candidate profile: **{data.get('candidate_name')}** (ID: `{data.get('resume_id')}`)", icon="⚠️")
                             else:
-                                status_area.success(f"Successfully ingested: **{data.get('candidate_name')}**", icon=":material/check_circle:")
+                                status_area.success(f"Successfully ingested: **{data.get('candidate_name')}**", icon="✅")
                                 # Display Summary
                                 st.markdown(f"""
                                 <div class='glass-card'>
-                                    <h4 style='margin-top:0px; color:#818cf8;'>AI Summary — Generated by llama3</h4>
+                                    <h4 style='margin-top:0px; color:var(--metric-grad-start);'>AI Summary — Generated by llama3</h4>
                                     <p style='font-style:italic; font-size:14px; line-height:1.6;'>"{data.get('summary')}"</p>
                                 </div>
                                 """, unsafe_allow_html=True)
                         else:
                             detail = r.json().get("detail", "Unknown backend parsing error.")
-                            status_area.error(f"Failed to parse {uploaded_file.name}: {detail}", icon=":material/error:")
+                            status_area.error(f"Failed to parse {uploaded_file.name}: {detail}", icon="❌")
                     except Exception as e:
-                        status_area.error(f"Error connecting to backend upload pipeline: {e}", icon=":material/error:")
+                        status_area.error(f"Error connecting to backend upload pipeline: {e}", icon="❌")
 
-elif page == ":material/search: NL Search":
-    st.markdown("<h1 style='background: linear-gradient(135deg, #e2e8f0 0%, #94a3b8 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;'>Natural Language Candidate Search</h1>", unsafe_allow_html=True)
+elif page == "🔍 NL Search":
+    st.markdown("<h1 class='title-gradient'>Natural Language Candidate Search</h1>", unsafe_allow_html=True)
     st.write("Type a natural language query describing target requirements (e.g. skills, experience years, certifications). The system will compute candidate matches based on a hybrid keyword-semantic ranking.")
     
     if not backend_active:
-        st.error("Search is disabled when backend service is offline.", icon=":material/error:")
+        st.error("Search is disabled when backend service is offline.", icon="🚨")
     else:
         # Search panel
         col_inp, col_th = st.columns([4, 1])
@@ -433,9 +583,9 @@ elif page == ":material/search: NL Search":
                         results = [c for c in results if c["total_score"] >= threshold]
                         
                         if not results:
-                            st.info("No candidates matched the criteria with a score exceeding the threshold.", icon=":material/info:")
+                            st.info("No candidates matched the criteria with a score exceeding the threshold.", icon="ℹ️")
                         else:
-                            st.success(f"Found {len(results)} matching candidates (Score ≥ {threshold})", icon=":material/check_circle:")
+                            st.success(f"Found {len(results)} matching candidates (Score ≥ {threshold})", icon="✅")
                             
                             # Render candidates in cards
                             for cand in results:
@@ -450,8 +600,8 @@ elif page == ":material/search: NL Search":
                                 with col_c1:
                                     st.markdown(f"""
                                     <div style='margin-bottom:0px;'>
-                                        <h3 style='margin-bottom: 2px; color:#818cf8;'>{cand['candidate_name']}</h3>
-                                        <span style='font-size:12px; color:#64748b;'>Source file: {cand['filename']} | Experience: {cand['experience_years']} years</span>
+                                        <h3 style='margin-bottom: 2px; color:var(--metric-grad-start);'>{cand['candidate_name']}</h3>
+                                        <span style='font-size:12px; color:var(--muted-text);'>Source file: {cand['filename']} | Experience: {cand['experience_years']} years</span>
                                     </div>
                                     """, unsafe_allow_html=True)
                                     
@@ -467,7 +617,7 @@ elif page == ":material/search: NL Search":
                                     
                                     # AI Summary
                                     st.markdown(f"""
-                                    <div style='margin-top:12px; margin-bottom:12px; border-left:3px solid rgba(168, 85, 247, 0.4); padding-left:14px; font-style:italic; font-size:13.5px; color:#cbd5e1;'>
+                                    <div style='margin-top:12px; margin-bottom:12px; border-left:3px solid var(--cert-border); padding-left:14px; font-style:italic; font-size:13.5px; color:var(--text-color);'>
                                         "{cand['summary']}"
                                     </div>
                                     """, unsafe_allow_html=True)
@@ -476,7 +626,7 @@ elif page == ":material/search: NL Search":
                                     st.markdown(f"""
                                     <div style='text-align: center; margin-top: 10px;'>
                                         <div class='score-circle {score_class}'>{score}</div>
-                                        <div style='font-size:10px; color:#94a3b8; font-weight:600; text-transform:uppercase; margin-top:6px;'>Match Rank</div>
+                                        <div style='font-size:10px; color:var(--muted-text); font-weight:600; text-transform:uppercase; margin-top:6px;'>Match Rank</div>
                                     </div>
                                     """, unsafe_allow_html=True)
                                     
@@ -495,13 +645,12 @@ elif page == ":material/search: NL Search":
                                     st.write(f"• **Certifications Reference (5%)**: {bd.get('certifications_score')}% / 100%")
                                     st.progress(bd.get("certifications_score", 0.0) / 100.0)
                                 
-                                # Add/Remove from Comparison list
                                 if cid not in st.session_state["compare_list"]:
-                                    if st.button("Add to Comparison Matrix", key=f"add_{cid}"):
+                                    if st.button("Compare ⚖️", key=f"add_{cid}"):
                                         st.session_state["compare_list"].append(cid)
                                         st.rerun()
                                 else:
-                                    if st.button("Remove from Comparison Matrix", key=f"rem_{cid}"):
+                                    if st.button("Remove ❌", key=f"rem_{cid}"):
                                         st.session_state["compare_list"].remove(cid)
                                         st.rerun()
                                 st.markdown("---")
@@ -509,19 +658,19 @@ elif page == ":material/search: NL Search":
                 except Exception as e:
                     st.error(f"Error executing search query: {e}")
 
-elif page == ":material/compare: Compare Candidates":
-    st.markdown("<h1 style='background: linear-gradient(135deg, #e2e8f0 0%, #94a3b8 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;'>Candidate Comparison Matrix</h1>", unsafe_allow_html=True)
+elif page == "⚖️ Compare Candidates":
+    st.markdown("<h1 class='title-gradient'>Candidate Comparison Matrix</h1>", unsafe_allow_html=True)
     st.write("Compare selected candidates side-by-side. Add candidates from the 'NL Search' page to populate this list.")
     
     if not backend_active:
-        st.error("Comparison is disabled when backend service is offline.", icon=":material/error:")
+        st.error("Comparison is disabled when backend service is offline.", icon="🚨")
     elif not st.session_state["compare_list"]:
-        st.info("No candidates selected for comparison yet. Please search for candidates and click 'Add to Comparison Matrix' to start comparing.", icon=":material/info:")
+        st.info("No candidates selected for comparison yet. Please search for candidates and click 'Add to Comparison Matrix' to start comparing.", icon="ℹ️")
     else:
         st.markdown(f"Comparing **{len(st.session_state['compare_list'])}** selected candidates.")
         
         # Clear Button
-        if st.button("Clear All Selections"):
+        if st.button("Clear All Selections 🧹"):
             st.session_state["compare_list"] = []
             st.rerun()
             
@@ -537,45 +686,28 @@ elif page == ":material/compare: Compare Candidates":
                     cid = cand["resume_id"]
                     
                     with col:
-                        st.markdown(f"""
-                        <div class='glass-card' style='min-height: 550px;'>
-                            <h3 style='margin-top:0px; color:#818cf8; text-align:center;'>{cand['candidate_name']}</h3>
-                            <p style='font-size:12px; color:#64748b; text-align:center;'>{cand['filename']}</p>
-                            <hr style='border-top:1px solid rgba(255,255,255,0.05); margin:12px 0;'>
+                        with st.container(border=True):
+                            st.subheader(cand['candidate_name'])
+                            st.caption(cand['filename'])
+                            st.divider()
                             
-                            <div style='margin-bottom:12px;'>
-                                <strong>Experience:</strong><br>
-                                <span style='font-size:18px; font-weight:600; color:#e2e8f0;'>{cand['experience_years']} Years</span>
-                            </div>
+                            st.markdown("**Experience:**")
+                            st.write(f"{cand['experience_years']} Years")
                             
-                            <div style='margin-bottom:12px;'>
-                                <strong>Top Skills:</strong><br>
-                                <div style='margin-top:6px;'>
-                                    {" ".join([f"<span class='badge'>{s}</span>" for s in cand['skills'][:6]])}
-                                </div>
-                            </div>
+                            st.markdown("**Top Skills:**")
+                            st.write(", ".join(cand['skills'][:6]) if cand['skills'] else "None")
                             
-                            <div style='margin-bottom:12px;'>
-                                <strong>Certifications:</strong><br>
-                                <div style='margin-top:6px;'>
-                                    {" ".join([f"<span class='badge badge-cert'>{c}</span>" for c in cand['certifications']]) if cand['certifications'] else "<span style='font-size:12px; color:#64748b;'>None</span>"}
-                                </div>
-                            </div>
+                            st.markdown("**Certifications:**")
+                            st.write(", ".join(cand['certifications']) if cand['certifications'] else "None")
                             
-                            <div style='margin-bottom:12px;'>
-                                <strong>Education:</strong><br>
-                                <span style='font-size:13px; color:#cbd5e1;'>{", ".join(cand['education']) if cand['education'] else "Not extracted"}</span>
-                            </div>
+                            st.markdown("**Education:**")
+                            st.write(", ".join(cand['education']) if cand['education'] else "Not extracted")
                             
-                            <div style='margin-bottom:12px;'>
-                                <strong>AI Summary:</strong><br>
-                                <span style='font-size:12.5px; font-style:italic; line-height:1.5; color:#cbd5e1;'>"{cand['summary'] or 'Summary not generated.'}"</span>
-                            </div>
-                        </div>
-                        """, unsafe_allow_html=True)
+                            st.markdown("**AI Summary:**")
+                            st.info(cand['summary'] or 'Summary not generated.')
                         
                         # Remove button
-                        if st.button("Remove Selections", key=f"comp_rem_{cid}"):
+                        if st.button("Remove ❌", key=f"comp_rem_{cid}"):
                             st.session_state["compare_list"].remove(cid)
                             st.rerun()
                             
