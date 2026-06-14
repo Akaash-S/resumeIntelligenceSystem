@@ -107,14 +107,18 @@ def parse_txt(file_bytes: bytes) -> str:
     return file_bytes.decode("utf-8", errors="ignore").strip()
 
 def extract_text(file_bytes: bytes, filename: str) -> str:
-    ext = filename.split(".")[-1].lower()
+    if "." in filename:
+        ext = filename.split(".")[-1].lower()
+    else:
+        ext = "unknown"
+        
     logger.bind(stage="PARSE").info(f"Extracting text from {filename} ({ext})...")
     
-    if ext == "pdf":
+    if ext == "pdf" or (ext == "unknown" and file_bytes.startswith(b"%PDF")):
         text = parse_pdf(file_bytes)
-    elif ext in ["docx", "doc"]:
+    elif ext in ["docx", "doc"] or (ext == "unknown" and file_bytes.startswith(b"PK")):
         text = parse_docx(file_bytes)
-    elif ext in ["txt", "md"]:
+    elif ext in ["txt", "md"] or ext == "unknown":
         text = parse_txt(file_bytes)
     else:
         logger.bind(stage="PARSE").error(f"Unsupported file format: {ext}")

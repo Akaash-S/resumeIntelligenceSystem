@@ -1,8 +1,8 @@
 from loguru import logger
 from backend.app.config import settings
-from backend.app.database import get_resume, save_search, update_resume_summary
+from backend.app.database import get_resume, save_search
 from backend.app.vector_store import query_vector_store
-from backend.app.analyzer import parse_search_query, generate_summary
+from backend.app.analyzer import parse_search_query
 
 def calculate_skills_score(query_skills: list, candidate_skills: list) -> float:
     if not query_skills:
@@ -62,8 +62,8 @@ def calculate_certifications_score(query_certs: list, candidate_certs: list) -> 
 def rank_candidates(query_text: str, threshold: float = 40.0) -> list:
     logger.bind(stage="RANK").info(f"Ranking candidates for query: '{query_text}'")
     
-    # 1. Retrieve top 10 chunks from vector store
-    matched_chunks = query_vector_store(query_text, n_results=10)
+    # 1. Retrieve top 100 chunks from vector store
+    matched_chunks = query_vector_store(query_text, n_results=100)
     
     # 2. Parse search query using LLM
     parsed_query = parse_search_query(query_text)

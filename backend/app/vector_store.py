@@ -24,6 +24,8 @@ def get_embedding(text: str) -> list:
             if embedding:
                 return embedding
             raise ValueError("No embedding vector returned in JSON response.")
+        elif response.status_code == 404:
+            raise RuntimeError("Ollama model 'nomic-embed-text' not found. Please run: ollama pull nomic-embed-text")
         else:
             raise RuntimeError(f"Ollama embeddings returned status {response.status_code}: {response.text}")
     except httpx.ConnectError:

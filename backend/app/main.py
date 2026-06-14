@@ -40,11 +40,11 @@ class CompareRequest(BaseModel):
     candidate_ids: list[str]
 
 @app.post("/upload")
-async def upload_resume(file: UploadFile = File(...)):
+def upload_resume(file: UploadFile = File(...)):
     logger.bind(stage="REQUEST").info(f"Received upload request for file: {file.filename}")
     try:
         # 1. Read bytes
-        file_bytes = await file.read()
+        file_bytes = file.file.read()
         if not file_bytes:
             raise HTTPException(status_code=400, detail="Empty file uploaded.")
             
@@ -110,7 +110,7 @@ async def upload_resume(file: UploadFile = File(...)):
         raise HTTPException(status_code=500, detail=f"Ingestion pipeline failed: {str(e)}")
 
 @app.delete("/resume/{resume_id}")
-async def delete_candidate(resume_id: str):
+def delete_candidate(resume_id: str):
     logger.bind(stage="REQUEST").info(f"Received request to delete resume ID: {resume_id}")
     try:
         # Check if exists
@@ -131,7 +131,7 @@ async def delete_candidate(resume_id: str):
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.post("/search")
-async def search_candidates(req: SearchRequest):
+def search_candidates(req: SearchRequest):
     logger.bind(stage="REQUEST").info(f"Received search request for: '{req.query_text}'")
     try:
         results = rank_candidates(req.query_text)
@@ -153,7 +153,7 @@ async def search_candidates(req: SearchRequest):
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.post("/compare")
-async def compare_candidates(req: CompareRequest):
+def compare_candidates(req: CompareRequest):
     logger.bind(stage="REQUEST").info(f"Received compare request for candidates: {req.candidate_ids}")
     try:
         candidates = []
@@ -167,7 +167,7 @@ async def compare_candidates(req: CompareRequest):
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.get("/resumes")
-async def get_all_resumes():
+def get_all_resumes():
     logger.bind(stage="REQUEST").debug("Received request to list all resumes.")
     try:
         resumes = list_resumes()
@@ -180,7 +180,7 @@ async def get_all_resumes():
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.get("/dashboard")
-async def get_system_dashboard():
+def get_system_dashboard():
     logger.bind(stage="REQUEST").debug("Received request for dashboard stats.")
     try:
         stats = get_stats()
@@ -190,7 +190,7 @@ async def get_system_dashboard():
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.get("/health")
-async def health_check():
+def health_check():
     logger.bind(stage="REQUEST").debug("Received health check.")
     sqlite_ok = False
     chroma_ok = False

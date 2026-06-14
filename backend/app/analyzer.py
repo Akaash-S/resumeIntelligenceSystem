@@ -35,6 +35,8 @@ def call_ollama(
             if response.status_code == 200:
                 result = response.json()
                 return result.get("response", "").strip()
+            elif response.status_code == 404:
+                logger.bind(stage="LLM").warning(f"Ollama model '{model}' not found locally. Please run: ollama pull {model}")
             else:
                 logger.bind(stage="LLM").warning(
                     f"Ollama {model} returned status code {response.status_code}: {response.text}"
@@ -49,7 +51,7 @@ def call_ollama(
             logger.bind(stage="LLM").warning(f"Error calling Ollama model {model}: {e}")
             continue
             
-    raise RuntimeError("All configured Ollama models failed or timed out.")
+    raise RuntimeError("All configured Ollama models failed or timed out. Please ensure Ollama is running and models are pulled (e.g. `ollama pull llama3`).")
 
 def analyze_resume_text(raw_text: str) -> dict:
     logger.bind(stage="LLM").info("Running LLM analysis on raw resume text...")
@@ -74,7 +76,7 @@ def analyze_resume_text(raw_text: str) -> dict:
     prompt = f"Resume Raw Text:\n\n{truncated_text}\n\nExtract the JSON object:"
     
     try:
-        response_str = call_ollama(prompt, system_prompt=system_prompt, json_format=True, timeout=35.0)
+        response_str = call_ollama(prompt, system_prompt=system_prompt, json_format=True, timeout=180.0)
         parsed_data = json.loads(response_str)
         
         # Ensure correct types
@@ -119,8 +121,7 @@ def generate_summary(raw_text: str, structured_data: dict) -> str:
     )
     
     try:
-        # Strict 8 seconds timeout as per spec
-        summary = call_ollama(summary_prompt, json_format=False, timeout=8.0)
+        summary = call_ollama(summary_prompt, json_format=False, timeout=120.0)
         logger.bind(stage="LLM").info("AI summary generated successfully.")
         return summary
     except Exception as e:
@@ -145,7 +146,7 @@ def parse_search_query(query: str) -> dict:
     prompt = f"Query: \"{query}\"\nExtract structured filters:"
     
     try:
-        response_str = call_ollama(prompt, system_prompt=system_prompt, json_format=True, timeout=10.0)
+        response_str = call_ollama(prompt, system_prompt=system_prompt, json_format=True, timeout=60.0)
         parsed_query = json.loads(response_str)
         
         parsed_query["skills"] = [str(s).lower().strip() for s in parsed_query.get("skills", []) if s]

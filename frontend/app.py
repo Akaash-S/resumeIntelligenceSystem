@@ -193,7 +193,7 @@ BACKEND_URL = "http://127.0.0.1:8000"
 # Sidebar Connection Check
 def check_connection():
     try:
-        r = requests.get(f"{BACKEND_URL}/health", timeout=2.0)
+        r = requests.get(f"{BACKEND_URL}/health", timeout=5.0)
         if r.status_code in [200, 503]:
             return True, r.json().get("services", {})
         return False, None
@@ -346,7 +346,7 @@ if page == ":material/dashboard: Dashboard":
                                     del_res = requests.delete(f"{BACKEND_URL}/resume/{r['resume_id']}")
                                     if del_res.status_code == 200:
                                         st.success(f"Deleted {r.get('candidate_name')}", icon=":material/check_circle:")
-                                        st.experimental_rerun()
+                                        st.rerun()
                                     else:
                                         st.error("Deletion failed.", icon=":material/error:")
                     else:
@@ -499,11 +499,11 @@ elif page == ":material/search: NL Search":
                                 if cid not in st.session_state["compare_list"]:
                                     if st.button("Add to Comparison Matrix", key=f"add_{cid}"):
                                         st.session_state["compare_list"].append(cid)
-                                        st.experimental_rerun()
+                                        st.rerun()
                                 else:
                                     if st.button("Remove from Comparison Matrix", key=f"rem_{cid}"):
                                         st.session_state["compare_list"].remove(cid)
-                                        st.experimental_rerun()
+                                        st.rerun()
                                 st.markdown("---")
                                 
                 except Exception as e:
@@ -523,7 +523,7 @@ elif page == ":material/compare: Compare Candidates":
         # Clear Button
         if st.button("Clear All Selections"):
             st.session_state["compare_list"] = []
-            st.experimental_rerun()
+            st.rerun()
             
         try:
             r = requests.post(f"{BACKEND_URL}/compare", json={"candidate_ids": st.session_state["compare_list"]})
@@ -577,7 +577,7 @@ elif page == ":material/compare: Compare Candidates":
                         # Remove button
                         if st.button("Remove Selections", key=f"comp_rem_{cid}"):
                             st.session_state["compare_list"].remove(cid)
-                            st.experimental_rerun()
+                            st.rerun()
                             
         except Exception as e:
             st.error(f"Error building comparison data: {e}")
