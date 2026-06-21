@@ -3,6 +3,7 @@ from backend.app.config import settings
 from backend.app.database import get_resume, save_search
 from backend.app.vector_store import query_vector_store
 from backend.app.analyzer import parse_search_query
+from backend.services.domain.knowledge_ranker import calculate_domain_alignment
 
 def calculate_skills_score(query_skills: list, candidate_skills: list) -> float:
     if not query_skills:
@@ -104,8 +105,8 @@ def rank_candidates(query_text: str, threshold: float = 40.0) -> list:
         # e. Certifications Score (5%)
         certifications_score = calculate_certifications_score(parsed_query["certifications"], candidate["certifications"])
         
-        # Total Weighted Score
-        total_score = (
+        # Total Weighted Score (Resume Score)
+        resume_score = (
             (skills_score * 0.55) +
             (semantic_score * 0.25) +
             (experience_score * 0.10) +
@@ -113,8 +114,16 @@ def rank_candidates(query_text: str, threshold: float = 40.0) -> list:
             (certifications_score * 0.05)
         )
         
+        # Domain Alignment Score
+        domain_score = calculate_domain_alignment(parsed_query, candidate["skills"], candidate["experience_years"])
+        
+        # Final Score
+        total_score = (0.80 * resume_score) + (0.20 * domain_score)
+        
         # Round scores for clean presentation
         total_score = round(total_score, 1)
+        resume_score = round(resume_score, 1)
+        domain_score = round(domain_score, 1)
         skills_score = round(skills_score, 1)
         semantic_score = round(semantic_score, 1)
         experience_score = round(experience_score, 1)
@@ -124,7 +133,8 @@ def rank_candidates(query_text: str, threshold: float = 40.0) -> list:
         # Log breakdown
         logger.bind(stage="RANK").debug(
             f"Candidate: {candidate['candidate_name']} | "
-            f"Total: {total_score} | Skills: {skills_score} | Semantic: {semantic_score} | "
+            f"Final: {total_score} | Resume: {resume_score} | Domain: {domain_score} | "
+            f"Skills: {skills_score} | Semantic: {semantic_score} | "
             f"Exp: {experience_score} | Projects: {projects_score} | Certs: {certifications_score}"
         )
         
@@ -140,6 +150,8 @@ def rank_candidates(query_text: str, threshold: float = 40.0) -> list:
             "projects": candidate["projects"],
             "upload_time": candidate["upload_time"],
             "total_score": total_score,
+            "resume_score": resume_score,
+            "domain_score": domain_score,
             "score_breakdown": {
                 "skills_score": skills_score,
                 "semantic_score": semantic_score,

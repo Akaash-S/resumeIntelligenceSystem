@@ -11,6 +11,11 @@ collection = chroma_client.get_or_create_collection(
     metadata={"hnsw:space": "cosine"}  # Cosine similarity metric
 )
 
+company_collection = chroma_client.get_or_create_collection(
+    name="company_collection",
+    metadata={"hnsw:space": "cosine"}
+)
+
 def get_embedding(text: str) -> list:
     url = f"{settings.OLLAMA_BASE_URL}/api/embeddings"
     payload = {

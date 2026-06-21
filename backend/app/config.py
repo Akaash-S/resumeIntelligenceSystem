@@ -9,6 +9,7 @@ ROOT_DIR = Path(__file__).resolve().parent.parent.parent
 
 class Settings(BaseSettings):
     OLLAMA_BASE_URL: str = "http://localhost:11434"
+    OLLAMA_MODEL: str = "llama3.2:1b"
     TESSERACT_CMD: str = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
     SQLITE_DB_PATH: str = "data/resume_intelligence.db"
     CHROMA_DB_PATH: str = "data/chroma"

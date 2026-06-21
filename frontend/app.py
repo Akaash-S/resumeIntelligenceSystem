@@ -362,7 +362,7 @@ with st.sidebar:
     # Navigation Option
     page = st.radio(
         "Navigation",
-        ["📊 Dashboard", "📤 Upload Resume", "🔍 NL Search", "⚖️ Compare Candidates"],
+        ["📊 Dashboard", "📤 Upload Resume", "🔍 NL Search", "⚖️ Compare Candidates", "🧠 Company Intelligence"],
         index=0
     )
     st.markdown("---")
@@ -626,7 +626,10 @@ elif page == "🔍 NL Search":
                                     st.markdown(f"""
                                     <div style='text-align: center; margin-top: 10px;'>
                                         <div class='score-circle {score_class}'>{score}</div>
-                                        <div style='font-size:10px; color:var(--muted-text); font-weight:600; text-transform:uppercase; margin-top:6px;'>Match Rank</div>
+                                        <div style='font-size:10px; color:var(--muted-text); font-weight:600; text-transform:uppercase; margin-top:6px;'>Final Match</div>
+                                        
+                                        <div style='font-size:11px; margin-top: 8px;'>Resume: <b>{cand.get('resume_score', 0)}</b></div>
+                                        <div style='font-size:11px;'>Domain: <b>{cand.get('domain_score', 0)}</b></div>
                                     </div>
                                     """, unsafe_allow_html=True)
                                     
@@ -713,3 +716,78 @@ elif page == "⚖️ Compare Candidates":
                             
         except Exception as e:
             st.error(f"Error building comparison data: {e}")
+
+elif page == "🧠 Company Intelligence":
+    st.markdown("<h1 class='title-gradient'>Domain Intelligence Layer</h1>", unsafe_allow_html=True)
+    st.write("Interact with the NexusFDE Recruitment Intelligence agent powered by company knowledge.")
+    
+    if not backend_active:
+        st.error("Company Intelligence is disabled when backend service is offline.", icon="🚨")
+    else:
+        st.markdown("### 📚 Knowledge Management")
+        col_btn, col_stat = st.columns([1, 4])
+        with col_btn:
+            if st.button("Reindex Knowledge", type="secondary"):
+                with st.spinner("Reindexing company files..."):
+                    try:
+                        r = requests.post(f"{BACKEND_URL}/knowledge/reindex")
+                        if r.status_code == 200:
+                            st.success(f"Indexed {r.json().get('chunks_indexed', 0)} chunks.")
+                        else:
+                            st.error("Failed to reindex.")
+                    except Exception as e:
+                        st.error(f"Error: {e}")
+        
+        st.markdown("---")
+        st.markdown("### 💬 Ask Domain Agent")
+        
+        query = st.text_area("Enter your recruitment query:", placeholder="Find AI engineers with Python and Cloud experience...")
+        
+        if st.button("Query Agent", type="primary"):
+            if query:
+                with st.spinner("Agent is retrieving context and thinking..."):
+                    try:
+                        r = requests.post(f"{BACKEND_URL}/ask", json={"query": query})
+                        if r.status_code == 200:
+                            data = r.json()
+                            answer = data.get("answer", {})
+                            sources = data.get("sources", [])
+                            
+                            st.markdown("#### Agent Response")
+                            if "error" in answer:
+                                st.error(answer["error"])
+                            else:
+                                st.markdown(f"**Summary:** {answer.get('summary', '')}")
+                                
+                                st.markdown("**Strengths:**")
+                                for s in answer.get("strengths", []):
+                                    st.markdown(f"- {s}")
+                                    
+                                st.markdown("**Weakness:**")
+                                for w in answer.get("weakness", []):
+                                    st.markdown(f"- {w}")
+                                    
+                                st.markdown(f"**Recommendation:** {answer.get('recommendation', '')}")
+                                
+                            with st.expander("View Retrieved Context Sources"):
+                                if not sources:
+                                    st.info("No sources were retrieved for this query.")
+                                else:
+                                    for s in sources:
+                                        source_type = s.get('type', 'Unknown').replace('_', ' ').title()
+                                        similarity = round(s.get('similarity', 0) * 100, 1)
+                                        
+                                        if s.get('type') == 'company_rule':
+                                            name = s.get('source', 'Unknown File')
+                                            icon = "🏢"
+                                        else:
+                                            name = s.get('candidate', 'Unknown Candidate')
+                                            icon = "📄"
+                                            
+                                        st.markdown(f"**{icon} {source_type}**: `{name}` — *Match: {similarity}%*")
+                        else:
+                            st.error(f"Agent failed: {r.text}")
+                    except Exception as e:
+                        st.error(f"Error calling agent: {e}")
+            else:
+                st.warning("Please enter a query.")

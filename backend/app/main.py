@@ -13,6 +13,8 @@ from backend.app.parser import extract_text, get_file_hash
 from backend.app.analyzer import analyze_resume_text, generate_summary
 from backend.app.vector_store import index_resume, delete_resume_vectors, collection
 from backend.app.matcher import rank_candidates
+from backend.services.domain.knowledge_loader import load_and_index_company_knowledge
+from backend.services.domain.domain_agent import ask_domain_agent
 
 app = FastAPI(
     title="NexusFDE — Resume Intelligence System Backend",
@@ -32,12 +34,17 @@ app.add_middleware(
 async def startup_event():
     logger.bind(stage="REQUEST").info("Starting FastAPI backend...")
     init_db()
+    # Ingest company knowledge on startup
+    load_and_index_company_knowledge()
 
 class SearchRequest(BaseModel):
     query_text: str
 
 class CompareRequest(BaseModel):
     candidate_ids: list[str]
+
+class AskRequest(BaseModel):
+    query: str
 
 @app.post("/upload")
 def upload_resume(file: UploadFile = File(...)):
@@ -164,6 +171,26 @@ def compare_candidates(req: CompareRequest):
         return {"candidates": candidates}
     except Exception as e:
         logger.bind(stage="RESPONSE").error(f"Error fetching comparison: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/ask")
+def ask_recruitment_intelligence(req: AskRequest):
+    logger.bind(stage="REQUEST").info(f"Received ask request: '{req.query}'")
+    try:
+        result = ask_domain_agent(req.query)
+        return result
+    except Exception as e:
+        logger.bind(stage="RESPONSE").error(f"Error processing ask request: {e}\n{traceback.format_exc()}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/knowledge/reindex")
+def reindex_company_knowledge():
+    logger.bind(stage="REQUEST").info("Received request to reindex company knowledge")
+    try:
+        result = load_and_index_company_knowledge()
+        return result
+    except Exception as e:
+        logger.bind(stage="RESPONSE").error(f"Error reindexing knowledge: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.get("/resumes")
